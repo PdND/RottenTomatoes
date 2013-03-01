@@ -68,10 +68,10 @@ function tomatoes( apikey ) {
             else
             {
                 if( $.isUndefined( object ) || $.isNull( object ) )
-                    callback( null, [ ] );
+                    callback( null, [ ], 0 );
                 else
                 {
-                    callback( null, object.movies );
+                    callback( null, object.movies, object.total );
                 }
 
             }
