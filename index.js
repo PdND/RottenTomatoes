@@ -3,12 +3,64 @@ var $       = require( 'underscore' );
 
 function tomatoes( apikey ) {
 
+    /*
+    |   Error codes:
+    |   -1: invalid parameter
+    |   -2: request error
+    |   -3: invalid response
+    */
+
     var self = this;
 
     self.apikey = apikey;
     self.client = new restify.createJsonClient( {
         url: 'http://api.rottentomatoes.com'
     } );
+
+    self.movie = {
+
+        /*
+        |   gets movie info given movie id
+        |   -----------------------------------------
+        |   movieid is rottentomatoes movie id
+
+        |   callback(error, results) is called on error or complete
+        */
+        info: function( movieid, callback ) {
+
+            if( $.isUndefined( movieid) || $.isObject( movieid ) )
+            {
+                if( !$.isUndefined( callback ) )
+                    callback( new Error( -1, 'movieid needs to be a string or an integer' ) );
+
+                return;
+            }
+
+            var request_ep = '/api/public/v1.0/movies/' + parseInt( movieid ) + '.json?apikey=' + self.apikey;
+
+            self.client.get( request_ep, function( err, req, res, object ) {
+
+                if( err )
+                {
+                    err.number = -2;
+                    callback( err );
+                }
+                else
+                {
+                    if( $.isUndefined( object ) || $.isNull( object ) )
+                        callback( new Error( -3, 'cannot understand server response' ) );
+                    else
+                    {
+                        callback( null, object );
+                    }
+
+                }
+
+            } );
+
+        },
+
+    };
 
     /*
     |   searches for a movie in rottentomatoes db
@@ -23,7 +75,6 @@ function tomatoes( apikey ) {
     |
     |   callback(error, results) is called on error or complete
     |   if there's no result results is an empty array
-    }
     */
     self.search = function( search_info, callback ) {
 
@@ -47,7 +98,7 @@ function tomatoes( apikey ) {
                 q = search_info.q;
             else
             {
-                callback( new Error( -2, 'search_info.q cannot be undefined' ) );
+                callback( new Error( -1, 'search_info.q cannot be undefined' ) );
                 return;
             }
 
@@ -64,7 +115,10 @@ function tomatoes( apikey ) {
         self.client.get( request_ep, function( err, req, res, object ) {
 
             if( err )
+            {
+                err.number = -2;
                 callback( err );
+            }
             else
             {
                 if( $.isUndefined( object ) || $.isNull( object ) )
