@@ -16,7 +16,7 @@ var rottentomatoes = require( 'rottentomatoes' );
 var tomatoes = new rottentomatoes.init( API_KEY );
 ```
 
-Searching
+Searching by title
 -------------
 
 ```javascript
@@ -35,6 +35,15 @@ var search_info = {
 };
 
 tomatoes.search( search_info, function( error, results, total_results ) {
+  //  ...
+} );
+```
+
+Searching by id
+-------------
+
+```javascript
+tomatoes.movie.info( 123456 /* movie id */, function( error, results ) {
   //  ...
 } );
 ```
