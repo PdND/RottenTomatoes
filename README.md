@@ -43,7 +43,20 @@ Searching by id
 -------------
 
 ```javascript
+<<<<<<< HEAD
 tomatoes.movie.info( 123456 /* movie id */, function( error, results ) {
+=======
+tomatoes.movie.info( MOVIE_ID, function( error, results ) {
+  //  ...
+} );
+```
+
+Searching by imdb id
+-------------
+
+```javascript
+tomatoes.movie.alias( 'imdb', IMDB_ID, function( error, results ) {
+>>>>>>> Added movie.alias function for movie_alias API
   //  ...
 } );
 ```
