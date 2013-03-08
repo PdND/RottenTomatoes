@@ -40,8 +40,8 @@ function tomatoes( apikey ) {
                 return callback( new Error( -1, 'id has to be a string or an integer' ) );
             }
 
-            var request_ep = '/api/public/v1.0/movie_alias.json?type=' + type + '&id=' + parseInt( id ) + '&apikey=' + self.apikey;
-
+            var request_ep = '/api/public/v1.0/movie_alias.json?type=' + type + '&id=' + id + '&apikey=' + self.apikey;
+            
             self.client.get( request_ep, function( err, req, res, object ) {
 
                 if( err )
