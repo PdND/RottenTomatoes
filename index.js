@@ -28,20 +28,16 @@ function tomatoes( apikey ) {
         */
         alias: function( type, id, callback ) {
 
+            if( $.isUndefined( callback ) ) return;
+
             if( !$.isString( type ) )
             {
-                if( !$.isUndefined( callback ) )
-                    callback( new Error( -1, 'type has to be a string' ) );
-
-                return;
+                return callback( new Error( -1, 'type has to be a string' ) );
             }
 
             if( $.isUndefined( id ) || $.isObject( id ) )
             {
-                if( !$.isUndefined( callback ) )
-                    callback( new Error( -1, 'id has to be a string or an integer' ) );
-
-                return;
+                return callback( new Error( -1, 'id has to be a string or an integer' ) );
             }
 
             var request_ep = '/api/public/v1.0/movie_alias.json?type=' + type + '&id=' + parseInt( id ) + '&apikey=' + self.apikey;
@@ -59,7 +55,10 @@ function tomatoes( apikey ) {
                         callback( new Error( -3, 'cannot understand server response' ) );
                     else
                     {
-                        callback( null, object );
+                        if( !$.isUndefined( object.error ) )
+                            callback( object );
+                        else
+                            callback( null, object );
                     }
 
                 }
@@ -77,12 +76,11 @@ function tomatoes( apikey ) {
         */
         info: function( movieid, callback ) {
 
+            if( $.isUndefined( callback ) ) return;
+
             if( $.isUndefined( movieid ) || $.isObject( movieid ) )
             {
-                if( !$.isUndefined( callback ) )
-                    callback( new Error( -1, 'movieid has to be a string or an integer' ) );
-
-                return;
+                return callback( new Error( -1, 'movieid has to be a string or an integer' ) );
             }
 
             var request_ep = '/api/public/v1.0/movies/' + parseInt( movieid ) + '.json?apikey=' + self.apikey;
@@ -100,7 +98,10 @@ function tomatoes( apikey ) {
                         callback( new Error( -3, 'cannot understand server response' ) );
                     else
                     {
-                        callback( null, object );
+                        if( !$.isUndefined( object.error ) )
+                            callback( object );
+                        else
+                            callback( null, object );
                     }
 
                 }
@@ -127,12 +128,11 @@ function tomatoes( apikey ) {
     */
     self.search = function( search_info, callback ) {
 
+        if( $.isUndefined( callback ) ) return;
+
         if( $.isUndefined( search_info ) )
         {
-            if( !$.isUndefined( callback ) )
-                callback( new Error( -1, 'search_info cannot be undefined' ) );
-
-            return;
+            return callback( new Error( -1, 'search_info cannot be undefined' ) );
         }
 
         var q       = '',
@@ -174,7 +174,10 @@ function tomatoes( apikey ) {
                     callback( null, [ ], 0 );
                 else
                 {
-                    callback( null, object.movies, object.total );
+                    if( !$.isUndefined( object.error ) )
+                        callback( object );
+                    else
+                        callback( null, object.movies, object.total );
                 }
 
             }
